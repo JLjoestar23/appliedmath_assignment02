@@ -15,7 +15,7 @@ function root_approx = multivariate_newton_solver(fun, x0, solver_params)
     
     f_tol = 1e-14;
     if isfield(solver_params,'f_tol')
-        f_tol = solver_params.ftol;
+        f_tol = solver_params.f_tol;
     end
     
     dx_max = 1e8;
