@@ -13,16 +13,19 @@ root_approx_ana_j = multivariate_newton_solver(fun, x0, solver_params);
 
 %% Trajectory Test Problem
 
+% setup function handle
+V_dist = @(x) collision_func(x);
 
+% initialize solver params
+solver_params.approx_j = 1;
 
-%projectile motion function
-%theta is angle projectile is fired at (in radians)
-%t is time in seconds
-function V_p = projectile_traj(theta,t)
-    g = 2.3; %gravity in m/sˆ2
-    v0 = 14; %initial speed in m/s
-    px0 = 2; %initial x position
-    py0 = 4; %initial y position
-    %compute position vector
-    V_p = [v0*cos(theta)*t+px0; -.5*g*t.^2+v0*sin(theta)*t+py0];
-end
+% initial guess
+x0 = [pi/6, 3];
+
+% find roots to the problem
+solution = multivariate_newton_solver(V_dist, x0, solver_params);
+
+% visualize simulation
+theta_i = solution(1);
+t_c = solution(2);
+run_simulation(theta_i, t_c);
