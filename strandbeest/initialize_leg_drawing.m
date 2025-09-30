@@ -22,7 +22,13 @@ function leg_drawing = initialize_leg_drawing(leg_params)
         'o','markerfacecolor','r','markeredgecolor','r','markersize',8);
     end
     
+    % leg trajectory placeholder
     leg_drawing.leg_traj.x = [];
     leg_drawing.leg_traj.y = [];
     leg_drawing.leg_traj.h = plot(NaN, NaN, 'r--', 'LineWidth', 1.5);  % empty line
+    
+    % leg velocity placeholder
+    leg_drawing.leg_vel.x = NaN;
+    leg_drawing.leg_vel.y = NaN;
+    leg_drawing.leg_vel.h = quiver(NaN, NaN, NaN, NaN, 'b', 'LineWidth', 1.5,'MaxHeadSize', 1);
 end
