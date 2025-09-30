@@ -89,12 +89,20 @@ for i=1:length(thetas)
 
     % compute vertex coordinates
     vertex_coords_root = compute_coords(vertex_coords_guess, leg_params, thetas(i));
+
+    % compute vertex velocities
+    dVdtheta = compute_velocities(vertex_coords_root, leg_params, thetas(i));
+    
+    % get x and y velocity components for the leg
+    leg_vel_x = dVdtheta(13);
+    leg_vel_y = dVdtheta(14);
+    leg_vel = [leg_vel_x; leg_vel_y];
     
     % update guess to current root to ensure convergence next time step
-    vertex_coords_guess = vertex_coords_root;  
+    vertex_coords_guess = vertex_coords_root;
     
     % update drawing
-    leg_drawing = update_leg_drawing(vertex_coords_root, leg_drawing, leg_params);
+    leg_drawing = update_leg_drawing(vertex_coords_root, leg_vel, leg_drawing, leg_params);
 
     drawnow;
     
