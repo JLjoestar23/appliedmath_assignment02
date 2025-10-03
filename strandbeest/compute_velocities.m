@@ -1,4 +1,5 @@
-% Computes the theta derivatives of each vertex coordinate for the Jansen linkage
+% Computes the theta derivatives of each vertex coordinate for the Jansen
+% using an implicit method
 % 
 % INPUTS:
 % vertex_coords: a column vector containing the (x,y) coordinates of every vertex
@@ -11,7 +12,7 @@
 function dVdtheta = compute_velocities(vertex_coords, leg_params, theta)
     
     % function handle to pass into approximate_jacobian()
-    error_vec_fun = @(x) linkage_error_func(x, leg_params, theta);
+    error_vec_fun = @(x) link_length_error_func(x, leg_params);
     
     % approximates Jacobian for the linkage error function 
     approx_J = approximate_jacobian(error_vec_fun, vertex_coords);
@@ -24,7 +25,7 @@ function dVdtheta = compute_velocities(vertex_coords, leg_params, theta)
     
     % structure B vector and M matrix
     B_top = [dx1dtheta; dy1dtheta; dx2dtheta; dy2dtheta];
-    B_bottom = zeros(14, 1);
+    B_bottom = zeros(10, 1);
     M_top = [eye(4), zeros(4, 10)];
     M_bottom = approx_J;
     

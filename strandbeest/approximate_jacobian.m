@@ -2,14 +2,13 @@
 % numerically using central finite differences.
 %
 % INPUTS:
-%       fun: A function handle that maps an input vector x (n×1) to an 
-%            output vector f(x) (m×1).
+% fun: A function handle that maps an input vector x (n×1) to an 
+%      output vector f(x) (m×1).
+% x: nx1 column vector at which the Jacobian is to be approximated.
 %
-%       x: nx1 column vector at which the Jacobian is to be approximated.
-%
-%   OUTPUT:
-%         J: approximated mxn Jacobian of fun evaluated at x. Each entry 
-%            J(i,j) approximates ∂f_i/∂x_j
+% OUTPUT:
+% J: approximated mxn Jacobian of fun evaluated at x. Each entry 
+%    J(i,j) approximates ∂f_i/∂x_j
 function J = approximate_jacobian(fun, x)
     
     input_dim = length(x);
