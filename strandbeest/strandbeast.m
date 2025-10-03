@@ -115,6 +115,70 @@ for i=1:length(thetas)
     pause(dt);
 end
 
+hold off;
+
 if recording == 1
     close(v);
 end
+
+%% Plotting x and y leg velocities from theta = [0, 2pi]
+
+%column vector of initial guesses
+%for each vertex location.
+%in form: [x1;y1;x2;y2;...;xn;yn]
+vertex_coords_guess = [...
+[ 0; 50];... %vertex 1 guess
+[ -50; 0];... %vertex 2 guess
+[ -50; 50];... %vertex 3 guess
+[-100; 0];... %vertex 4 guess
+[-100; -50];... %vertex 5 guessclc
+[ -50; -50];... %vertex 6 guess
+[ -50; -100]... %vertex 7 guess
+];
+
+thetas = linspace(0, 2*pi, 500);
+leg_vels_x = zeros(length(thetas), 2);
+leg_vels_y = zeros(length(thetas), 2);
+
+for i=1:length(thetas)
+    % compute vertex coordinates
+    vertex_coords_root = compute_coords(vertex_coords_guess, leg_params, thetas(i));
+
+    % compute vertex velocities via Jacobian methods
+    dVdtheta = compute_velocities(vertex_coords_root, leg_params, thetas(i));
+
+    % compute vertex velocities via finite differences of position
+    dVdtheta_fd = finite_differences_compute_velocity(vertex_coords_root, leg_params, thetas(i));
+    
+    % get x and y velocity components for the leg
+    leg_vels_x(i, 1) = dVdtheta(13);
+    leg_vels_x(i, 2) = dVdtheta_fd(13);
+    leg_vels_y(i, 1) = dVdtheta(14);
+    leg_vels_y(i, 2) = dVdtheta_fd(14);
+    
+    % update guess to current root to ensure convergence next time step
+    vertex_coords_guess = vertex_coords_root;
+end
+
+figure();
+subplot(2, 1, 1);
+hold on;
+plot(thetas, leg_vels_x(:, 1), "b-", 'LineWidth', 1.5);
+plot(thetas, leg_vels_x(:, 2), "r--", 'LineWidth', 1.5);
+title('Comparing Computed Leg Horizontal Velocities');
+legend('Implicit Method', 'Finite Differences Method');
+xlabel('\theta (rads)');
+ylabel('Velocity (m/s)');
+xlim([thetas(1) thetas(end)])
+hold off;
+
+subplot(2, 1, 2);
+hold on;
+plot(thetas, leg_vels_y(:, 1), 'b-', 'LineWidth', 1.5);
+plot(thetas, leg_vels_y(:, 2), 'r--', 'LineWidth', 1.5);
+title('Comparing Computed Leg Vertical Velocities');
+legend('Implicit Method', 'Finite Differences Method');
+xlabel('\theta (rads)');
+ylabel('Velocity (m/s)');
+xlim([thetas(1) thetas(end)])
+hold off;
