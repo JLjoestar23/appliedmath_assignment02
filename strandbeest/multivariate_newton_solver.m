@@ -20,7 +20,7 @@ function root_approx = multivariate_newton_solver(fun, x0, solver_params)
     
     dx_max = 1e8;
     if isfield(solver_params,'dx_max')
-        dx_max = solver_params.dxmax;
+        dx_max = solver_params.dx_max;
     end
 
     approx_j = 1;
